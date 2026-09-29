@@ -1,0 +1,11 @@
+{
+  "name": "gebran-kastoun-portfolio-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix site run dev",
+    "build": "npm --prefix site run build",
+    "check": "npm --prefix site run check",
+    "verify": "npm --prefix site run verify",
+    "preview": "npm --prefix site start"
+  }
+}
