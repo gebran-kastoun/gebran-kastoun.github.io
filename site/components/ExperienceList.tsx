@@ -1,2 +1,12 @@
 import {experience} from '../content/experience';
-export default function ExperienceList({compact=false}:{compact?:boolean}){const CompanyHeading=compact?'h3':'h2';const RoleHeading=compact?'h4':'h3';return <div className="experience-list">{experience.map((e,i)=><article className="experience-row" key={e.company}><div><p className="eyebrow">{String(i+1).padStart(2,'0')} / {e.dates}</p><CompanyHeading>{e.company}</CompanyHeading></div><div><RoleHeading>{e.role}</RoleHeading>{!compact&&<><p>{e.description}</p><div className="experience-links">{e.links.map(l=><a className="text-link" href={l.url} key={l.url}>{l.title} ↗</a>)}</div></>}</div></article>)}</div>}
+
+export default function ExperienceList({compact=false}:{compact?:boolean}) {
+  const Heading=compact?'h3':'h2';
+  return <div className={`experience-list${compact?' experience-compact':''}`}>
+    {experience.map(entry=><article className="experience-row" key={entry.company}>
+      <Heading>{entry.company}</Heading>
+      <div className="experience-details"><p className="experience-role">{entry.role}</p>{!compact&&<><p>{entry.description}</p><div className="experience-links">{entry.links.map(link=><a className="text-link" href={link.url} key={link.url}>{link.title}</a>)}</div></>}</div>
+      {entry.dates&&<p className="experience-date">{entry.dates}</p>}
+    </article>)}
+  </div>;
+}

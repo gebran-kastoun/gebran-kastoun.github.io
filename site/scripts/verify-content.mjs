@@ -1,0 +1,27 @@
+// Exercise the reusable media renderer without adding fixtures to the public site.
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
+import ts from 'typescript';
+import React from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+const require=createRequire(import.meta.url);
+const source=readFileSync(new URL('../components/MediaGallery.tsx',import.meta.url),'utf8');
+const compiled=ts.transpileModule(source,{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS}}).outputText;
+const module={exports:{}};
+new Function('require','module','exports',compiled)(require,module,module.exports);
+const Gallery=module.exports.default;
+const render=items=>renderToStaticMarkup(React.createElement(Gallery,{items}));
+assert.equal(render(undefined),'');
+assert.equal(render([]),'');
+const image={type:'image',src:'/images/drawing-car.jpg',width:1500,height:1133,alt:'Drawing car',caption:'Existing project photo'};
+const imageHtml=render([image]);
+assert.match(imageHtml,/alt="Drawing car"/);
+assert.match(imageHtml,/width="1500" height="1133"/);
+assert.match(imageHtml,/loading="lazy"/);
+const videoHtml=render([{type:'video',src:'/test-only.mp4',width:1280,height:720,title:'Test video',caption:'Test caption',captions:{src:'/test-only.vtt',language:'en',label:'English'},transcript:'Spoken content'}]);
+assert.match(videoHtml,/<video[^>]*controls=""[^>]*playsInline=""[^>]*preload="metadata"/);
+assert.match(videoHtml,/<track kind="captions"/);
+assert.match(videoHtml,/Video transcript/);
+assert.doesNotMatch(videoHtml,/autoplay|autoPlay|<iframe/);
+console.log('PASS: absent galleries render nothing; images include descriptions and dimensions; videos include native controls, captions, transcript, and no autoplay.');

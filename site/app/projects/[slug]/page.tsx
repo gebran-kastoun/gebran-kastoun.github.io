@@ -1,12 +1,42 @@
 import {notFound} from 'next/navigation';
 import {projects,categories} from '../../../content/projects';
+import MediaGallery from '../../../components/MediaGallery';
 import ProjectVisual from '../../../components/ProjectVisual';
-import ProjectCard,{Tags} from '../../../components/ProjectCard';
+import {Tags} from '../../../components/ProjectCard';
 import {pageMetadata} from '../../../lib/metadata';
-export function generateStaticParams(){return projects.map(p=>({slug:p.slug}))}
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const p=projects.find(p=>p.slug===slug);return p?pageMetadata(p.title,p.summary,`/projects/${slug}/`,p.media==='car'?'/images/drawing-car.jpg':undefined):{title:'Not found'}}
-export default async function ProjectPage({params}:{params:Promise<{slug:string}>}){
- const {slug}=await params;const project=projects.find(p=>p.slug===slug);if(!project)notFound();const category=categories.find(c=>c.slug===project.categories[0])!;
- const related=projects.filter(p=>p.slug!==slug&&p.categories.some(c=>project.categories.includes(c))).slice(0,2);
- return <main id="main" className="wrap"><div className="page-intro project-intro"><nav className="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href={`/work/${category.slug}/`}>{category.title}</a><span>/</span><span>{project.shortTitle}</span></nav><p className="eyebrow">{project.context}{project.dates?` · ${project.dates}`:''}</p><h1>{project.title}</h1><p className="lead">{project.summary}</p><Tags tags={project.technologies}/></div><dl className="project-facts"><div><dt>My role</dt><dd>{project.role}</dd></div><div><dt>Platform</dt><dd>{project.platform}</dd></div><div><dt>Project context</dt><dd>{project.status}</dd></div></dl><figure className="project-hero"><ProjectVisual kind={project.media} priority/><figcaption>{project.caption}{project.media==='car'&&<> <a href={project.links[0].url}>Source report ↗</a></>}</figcaption></figure><div className="project-body"><aside><nav aria-label="On this page"><p className="eyebrow">In this project</p>{project.sections.map((s,i)=><a href={`#${s.id}`} key={s.id}><span>{String(i+1).padStart(2,'0')}</span>{s.title}</a>)}{project.links.length>0&&<a href="#resources"><span>↗</span>Report & demonstration</a>}</nav></aside><div className="prose">{project.sections.map(s=><section id={s.id} key={s.id}><h2>{s.title}</h2>{s.paragraphs.map(p=><p key={p}>{p}</p>)}{s.bullets&&<ul>{s.bullets.map(b=><li key={b}>{b}</li>)}</ul>}{s.code&&<pre><code>{s.code}</code></pre>}</section>)}{project.links.length>0&&<section id="resources"><h2>Report & demonstration</h2><p>The team report contains the full design discussion and references. The video opens on YouTube only when selected.</p><div className="resource-links">{project.links.map(l=><a className="text-link" href={l.url} key={l.url}>{l.label} ↗</a>)}</div></section>}</div></div>{related.length>0&&<section className="section"><div className="section-heading"><p className="eyebrow">Keep exploring</p><h2>Related work.</h2></div><div className="card-grid">{related.map(p=><ProjectCard key={p.slug} project={p}/>)}</div></section>}</main>
+
+export function generateStaticParams(){return projects.map(project=>({slug:project.slug}));}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}) {
+  const {slug}=await params;
+  const project=projects.find(project=>project.slug===slug);
+  return project?pageMetadata(project.title,project.summary,`/projects/${slug}/`,project.cover?.src):{title:'Not found'};
+}
+export default async function ProjectPage({params}:{params:Promise<{slug:string}>}) {
+  const {slug}=await params;
+  const project=projects.find(project=>project.slug===slug);
+  if(!project)notFound();
+  const category=categories.find(category=>category.slug===project.categories[0])!;
+  const nextProject=projects[(projects.findIndex(candidate=>candidate.slug===slug)+1)%projects.length];
+  const showToc=project.sections.length>=5;
+  return <main id="main" className="wrap project-page">
+    <nav className="breadcrumbs project-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href={`/work/${category.slug}/`}>{category.title}</a><span>/</span><span>{project.shortTitle}</span></nav>
+    <header className="project-intro">
+      <p className="project-context">{project.context}{project.dates?` · ${project.dates}`:''}</p>
+      <h1>{project.title}</h1>
+      <p className="lead">{project.summary}</p>
+      <div className="project-intro-bottom"><p><span>Status</span> {project.status}</p><Tags tags={project.technologies.slice(0,4)}/></div>
+    </header>
+    {(project.cover||project.media)&&<figure className="project-hero"><ProjectVisual project={project} priority/><figcaption>{project.cover?.caption??project.caption}{project.cover?.credit&&<> <a href={project.cover.credit.url}>{project.cover.credit.label} ↗</a></>}</figcaption></figure>}
+    <dl className="project-facts"><div><dt>My contribution</dt><dd>{project.role}</dd></div><div><dt>Platform</dt><dd>{project.platform}</dd></div></dl>
+    <MediaGallery items={project.gallery}/>
+    {showToc&&<nav className="project-jump" aria-label="On this page"><p>On this page</p><div>{project.sections.map(section=><a href={`#${section.id}`} key={section.id}>{section.title}</a>)}{project.links.length>0&&<a href="#resources">Resources</a>}</div></nav>}
+    <div className="project-story">
+      {project.sections.map(section=><section className="project-section" id={section.id} key={section.id}>
+        <h2>{section.title}</h2>
+        <div className="project-section-copy">{section.paragraphs.map(paragraph=><p key={paragraph}>{paragraph}</p>)}{section.bullets&&<ul>{section.bullets.map(bullet=><li key={bullet}>{bullet}</li>)}</ul>}{section.code&&<pre><code>{section.code}</code></pre>}</div>
+      </section>)}
+      {project.links.length>0&&<section className="project-section" id="resources"><h2>Resources</h2><div className="project-section-copy resource-links">{project.links.map(link=><a className="text-link" href={link.url} key={link.url}>{link.label} ↗</a>)}</div></section>}
+    </div>
+    <nav className="project-next" aria-label="Continue browsing projects"><div><p>Next project</p><a href={`/projects/${nextProject.slug}/`}>{nextProject.title} <span aria-hidden="true">→</span></a></div><a className="text-link" href={`/work/${category.slug}/`}>All {category.title} projects</a></nav>
+  </main>;
 }

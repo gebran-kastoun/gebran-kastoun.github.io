@@ -2,10 +2,26 @@ import {notFound} from 'next/navigation';
 import {categories,projects,getProject} from '../../../content/projects';
 import ProjectCard from '../../../components/ProjectCard';
 import {pageMetadata} from '../../../lib/metadata';
-export function generateStaticParams(){return categories.map(c=>({slug:c.slug}))}
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const{slug}=await params;const c=categories.find(c=>c.slug===slug);return c?pageMetadata(c.title,c.description,`/work/${slug}/`,slug==='robotics-embedded'?'/images/drawing-car.jpg':undefined):{title:'Not found'}}
-export default async function Category({params}:{params:Promise<{slug:string}>}){
- const {slug}=await params;const category=categories.find(c=>c.slug===slug);if(!category)notFound();
- const others=projects.filter(p=>p.categories.includes(slug)&&p.slug!==category.featured);
- return <main id="main" className="wrap"><div className="page-intro"><nav className="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/#work">Work</a><span>/</span><span>{category.title}</span></nav><p className="eyebrow">{category.number} / Engineering discipline</p><h1>{category.title}</h1><p className="lead">{category.description}</p></div><section className="category-feature" aria-label="Featured project"><p className="eyebrow">Featured project</p><ProjectCard project={getProject(category.featured)} feature/></section>{others.length>0&&<section className="section"><div className="section-heading"><p className="eyebrow">Further exploration</p><h2>More in this discipline.</h2></div><div className="card-grid">{others.map(p=><ProjectCard key={p.slug} project={p}/>)}</div></section>}{slug==='digital-design'&&<section className="companion section"><div><p className="eyebrow">Companion implementation</p><h2>TinyRV1 on FPGA.</h2></div><div><p>An eight-instruction, single-cycle processor with a Verilog datapath and control, directed trace-based verification, and deployment on an Intel Cyclone V.</p><p className="muted">A separate implementation from the five-stage TinyRV2 design.</p><a className="text-link" href="/projects/tinyrv2-processor/#tinyrv1">Explore the FPGA companion ↗</a></div></section>}<div className="category-nav"><p className="eyebrow">Explore another discipline</p>{categories.filter(c=>c.slug!==slug).map(c=><a href={`/work/${c.slug}/`} key={c.slug}>{c.title} ↗</a>)}</div></main>
+
+export function generateStaticParams(){return categories.map(category=>({slug:category.slug}));}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}) {
+  const {slug}=await params;
+  const category=categories.find(category=>category.slug===slug);
+  return category?pageMetadata(category.title,category.description,`/work/${slug}/`,slug==='robotics-embedded'?'/images/drawing-car.jpg':undefined):{title:'Not found'};
+}
+export default async function Category({params}:{params:Promise<{slug:string}>}) {
+  const {slug}=await params;
+  const category=categories.find(category=>category.slug===slug);
+  if(!category)notFound();
+  const others=projects.filter(project=>project.categories.includes(slug)&&project.slug!==category.featured);
+  return <main id="main" className="wrap">
+    <div className="page-intro category-intro">
+      <nav className="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/#work">Work</a><span>/</span><span>{category.title}</span></nav>
+      <h1>{category.title}</h1><p className="lead">{category.description}</p>
+    </div>
+    <section className="category-feature" aria-label="Featured project"><ProjectCard project={getProject(category.featured)} feature priority/></section>
+    {others.length>0&&<section className="section"><h2>Other projects</h2><div className="card-grid">{others.map(project=><ProjectCard key={project.slug} project={project}/>)}</div></section>}
+    {slug==='digital-design'&&<section className="companion section"><h2>TinyRV1 on FPGA</h2><div><p>A separate eight-instruction, single-cycle processor with a Verilog datapath and control, directed trace-based verification, and deployment on an Intel Cyclone V.</p><a className="text-link" href="/projects/tinyrv2-processor/#tinyrv1">View TinyRV1 companion</a></div></section>}
+    <nav className="category-nav" aria-label="Other project categories">{categories.filter(category=>category.slug!==slug).map(category=><a href={`/work/${category.slug}/`} key={category.slug}>{category.title}</a>)}</nav>
+  </main>;
 }

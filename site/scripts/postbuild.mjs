@@ -18,7 +18,7 @@ for(const file of files){
   const route=relative==='index.html'?'/':'/'+relative.replace(/(?:\/index)?\.html$/,'')+'/';
   if(relative!=='index.html'&&!relative.endsWith('/index.html')){const dest=path.join(root,relative.replace(/\.html$/,''),'index.html');await mkdir(path.dirname(dest),{recursive:true});await rename(file,dest)}
   routes.push(route);
- }else if(/\.(?:js|rsc|map)$/.test(file)||file.endsWith('.json'))await unlink(file);
+ }else if(/\.(?:js|rsc|map)$/.test(file)||file.endsWith('.json')||path.basename(file)==='.DS_Store')await unlink(file);
 }
 const sitemap='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+routes.sort().map(r=>`<url><loc>https://gebran-kastoun.github.io${r}</loc></url>`).join('')+'</urlset>\n';
 await writeFile(path.join(root,'sitemap.xml'),sitemap);

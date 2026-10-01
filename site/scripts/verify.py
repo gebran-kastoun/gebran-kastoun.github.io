@@ -17,6 +17,8 @@ class Page(HTMLParser):
   if tag=='meta':self.meta[a.get('name',a.get('property',''))]=a.get('content','')
   if tag=='link' and a.get('rel')=='canonical':self.canonical.append(a.get('href'))
   if tag=='link' and a.get('rel') in ['stylesheet','icon']:self.assets.append(a.get('href',''))
+  if tag in ['source','track'] or (tag=='video' and a.get('src')): self.assets.append(a.get('src',''))
+  if tag=='video' and a.get('poster'): self.assets.append(a['poster'])
   if tag=='img':
    assert a.get('alt') and a.get('width') and a.get('height'), 'Image lacks alt or dimensions'
    self.assets.append(a.get('src',''))
@@ -55,9 +57,10 @@ for path,page in pages.items():
  for marker in ['content-evidence-checklist','/Users/','coming soon','97%','2,000 balls','50% reduction','144 W','Untitled site']:
   if marker in path.read_text():errors.append(f'{rel}: unexpected content {marker}')
 urls={e.text for e in ET.parse(root/'sitemap.xml').findall('.//{*}loc')}
-assert urls=={'https://gebran-kastoun.github.io'+r for r in expected},'Sitemap route mismatch'
+generated_routes={'https://gebran-kastoun.github.io'+('/' if p.relative_to(root).as_posix()=='index.html' else '/'+p.relative_to(root).as_posix().removesuffix('index.html')) for p in pages if p.name!='404.html'}
+assert urls==generated_routes,'Sitemap route mismatch'
 assert (root/'404.html').exists() and (root/'.nojekyll').exists()
-allowed={'.html','.css','.jpg','.svg','.txt','.xml'}
+allowed={'.html','.css','.jpg','.svg','.txt','.xml','.png','.webp','.avif','.jpeg','.mp4','.webm','.vtt','.pdf'}
 for file in root.rglob('*'):
  if file.is_symlink(): errors.append(f'Public symlink: {file.relative_to(root)}')
  if {'.local','sources','private','notes','node_modules','.git'}.intersection(file.relative_to(root).parts): errors.append(f'Private/generated path in output: {file.relative_to(root)}')

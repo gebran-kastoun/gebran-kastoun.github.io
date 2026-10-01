@@ -1,4 +1,6 @@
 import ExperienceList from '../../components/ExperienceList';
 import {pageMetadata} from '../../lib/metadata';
-export const metadata=pageMetadata('Experience','SpaceX avionics, Cornell CUAir electrical leadership, and microcontroller teaching assistance.','/experience/');
-export default function Experience(){return <main id="main" className="wrap"><div className="page-intro"><p className="eyebrow">Experience</p><h1>Engineering,<br/>in practice.</h1><p className="lead">Industry, aircraft systems, and the lab. Experience connecting electronics, software, and the people building them.</p></div><ExperienceList/><section className="section companion"><div><p className="eyebrow">Technical detail</p><h2>See the work<br/>behind the roles.</h2></div><div><p>Explore the electronics, embedded systems, and processor projects in depth.</p><a className="button" href="/#work">Browse projects ↗</a></div></section></main>}
+export const metadata=pageMetadata('Experience','SpaceX avionics, Cornell CUAir electrical leadership, and microcontroller teaching.','/experience/');
+export default function Experience() {
+  return <main id="main" className="wrap"><div className="page-intro"><h1>Experience</h1><p className="lead">Avionics hardware, aircraft systems, and microcontroller teaching.</p></div><ExperienceList/></main>;
+}

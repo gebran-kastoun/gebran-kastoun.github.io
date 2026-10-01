@@ -1,14 +1,24 @@
-import ProjectCard from '../components/ProjectCard';
-import {getProject} from '../content/projects';
+import PCBExplorer from '../components/PCBExplorer';
+import {categories} from '../content/projects';
 import ExperienceList from '../components/ExperienceList';
+
 export default function Home() {
   return <main id="main">
-    <section className="hero wrap">
-      <div className="hero-copy"><p className="eyebrow">Cornell Engineering · Hardware + Software</p><h1>Gebran<br/>Kastoun<span className="period">.</span></h1><p className="hero-statement">I design electronics, write the software that controls them, and test complete systems.</p><p className="muted">SpaceX avionics experience.<br/>Cornell CUAir electrical leadership.</p><div className="actions"><a className="button" href="#work">Explore my work <span>↗</span></a><a className="text-link" href="/resume/">View resume <span>↗</span></a></div></div>
-      <figure className="hero-figure"><a href="/projects/autonomous-drawing-car/" aria-label="Explore the Autonomous Drawing Car"><img src="/images/drawing-car.jpg" alt="The team's autonomous drawing car, with a Pico W, motor drivers, and wiring on its red chassis" width="1500" height="1133" fetchPriority="high"/></a><figcaption><span>01 / Autonomous Drawing Car</span><span>Embedded systems in motion ↗</span></figcaption></figure>
+    <section className="pcb-home wrap" aria-label="Introduction and projects">
+      <div className="pcb-intro">
+        <h1>Gebran Kastoun<span className="period">.</span></h1>
+        <p className="hero-statement">I design electronics, write the software that controls them, and test complete systems.</p>
+        <p className="muted">Cornell Engineering · SpaceX avionics experience · CUAir electrical leadership</p>
+        <nav className="home-links" id="work" aria-label="Portfolio sections">
+          {categories.map(category=><a href={`/work/${category.slug}/`} key={category.slug}>{category.title}</a>)}
+          <a href="/about/">About</a><a href="/resume/">Resume</a>
+        </nav>
+      </div>
+      <PCBExplorer/>
     </section>
-    <section className="wrap section" id="work"><div className="section-heading"><p className="eyebrow">Explore by discipline</p><h2>From the circuit<br/>to the complete system.</h2></div><div className="discipline-grid">{[['01','Power & Electronics','Custom boards, power conversion, and avionics integration.','power-electronics'],['02','Robotics & Embedded','Sensing, control, and software that acts on the physical world.','robotics-embedded'],['03','Digital Design','Processor architecture, RTL, and verification.','digital-design']].map(([n,title,description,slug])=><a className="discipline" href={`/work/${slug}/`} key={slug}><span className="eyebrow">{n} / Engineering</span><h3>{title} <span>↗</span></h3><p>{description}</p><div className="discipline-diagram" aria-label="Illustrative system flow">{slug==='power-electronics'?'12S → Buck → 24 V':slug==='robotics-embedded'?'Sense → Compute → Act':'F → D → X → M → W'}</div></a>)}</div></section>
-    <section className="wrap section"><div className="section-heading"><p className="eyebrow">Selected work</p><h2>Built across<br/>the stack.</h2></div><div className="card-grid selected-primary">{['autonomous-drawing-car','gimbal-controller'].map(slug=><ProjectCard project={getProject(slug)} key={slug}/>)}</div><div className="card-grid selected-secondary">{['tinyrv2-processor','avionics-power-converter','galton-board'].map(slug=><ProjectCard project={getProject(slug)} key={slug}/>)}</div></section>
-    <section className="wrap section"><div className="section-heading"><p className="eyebrow">Experience</p><h2>From the lab<br/>to the aircraft.</h2></div><ExperienceList compact/><div className="section-end"><a className="text-link" href="/experience/">View experience ↗</a></div></section>
-  </main>
+    <section className="wrap section home-experience">
+      <div className="section-heading"><h2>Experience</h2><a className="text-link" href="/experience/">Full experience</a></div>
+      <ExperienceList compact/>
+    </section>
+  </main>;
 }
