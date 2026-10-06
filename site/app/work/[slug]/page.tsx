@@ -16,7 +16,7 @@ export default async function Category({params}:{params:Promise<{slug:string}>})
   const others=projects.filter(project=>project.categories.includes(slug)&&project.slug!==category.featured);
   return <main id="main" className="wrap">
     <div className="page-intro category-intro">
-      <nav className="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/#work">Work</a><span>/</span><span>{category.title}</span></nav>
+      <nav className="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/projects/">Projects</a><span>/</span><span>{category.title}</span></nav>
       <h1>{category.title}</h1><p className="lead">{category.description}</p>
     </div>
     <section className="category-feature" aria-label="Featured project"><ProjectCard project={getProject(category.featured)} feature priority/></section>

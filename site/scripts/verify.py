@@ -27,7 +27,7 @@ class Page(HTMLParser):
  def handle_data(self,data):
   if self.in_title:self.title+=data
 pages={p:Page(p.read_text()) for p in root.rglob('*.html')}
-expected=['/','/about/','/experience/','/resume/','/work/power-electronics/','/work/robotics-embedded/','/work/digital-design/']+['/projects/'+s+'/' for s in ['autonomous-drawing-car','gimbal-controller','tinyrv2-processor','avionics-power-converter','galton-board']]
+expected=['/','/about/','/experience/','/projects/','/resume/','/spacex/','/suas-2026/','/work/power-electronics/','/work/robotics-embedded/','/work/digital-design/']+['/projects/'+s+'/' for s in ['autonomous-drawing-car','gimbal-controller','tinyrv2-processor','avionics-power-converter','galton-board']]
 errors=[];checked=0;external=set()
 for route in expected:
  p=root / route.lstrip('/') / 'index.html'

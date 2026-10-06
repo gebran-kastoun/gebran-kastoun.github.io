@@ -1,7 +1,7 @@
 import {experience} from '../content/experience';
 
 export default function ExperienceList({compact=false}:{compact?:boolean}) {
-  const Heading=compact?'h3':'h2';
+  const Heading='h3';
   return <div className={`experience-list${compact?' experience-compact':''}`}>
     {experience.map(entry=><article className="experience-row" key={entry.company}>
       <Heading>{entry.company}</Heading>

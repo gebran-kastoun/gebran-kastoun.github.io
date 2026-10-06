@@ -1,6 +1,8 @@
 import {notFound} from 'next/navigation';
 import {projects,categories} from '../../../content/projects';
 import MediaGallery from '../../../components/MediaGallery';
+import BoardComparison from '../../../components/BoardComparison';
+import FeaturedVideo from '../../../components/FeaturedVideo';
 import ProjectVisual from '../../../components/ProjectVisual';
 import {Tags} from '../../../components/ProjectCard';
 import {pageMetadata} from '../../../lib/metadata';
@@ -26,8 +28,10 @@ export default async function ProjectPage({params}:{params:Promise<{slug:string}
       <p className="lead">{project.summary}</p>
       <div className="project-intro-bottom"><p><span>Status</span> {project.status}</p><Tags tags={project.technologies.slice(0,4)}/></div>
     </header>
+    {project.featuredVideo&&<FeaturedVideo video={project.featuredVideo}/>}
     {(project.cover||project.media)&&<figure className="project-hero"><ProjectVisual project={project} priority/><figcaption>{project.cover?.caption??project.caption}{project.cover?.credit&&<> <a href={project.cover.credit.url}>{project.cover.credit.label} ↗</a></>}</figcaption></figure>}
     <dl className="project-facts"><div><dt>My contribution</dt><dd>{project.role}</dd></div><div><dt>Platform</dt><dd>{project.platform}</dd></div></dl>
+    {project.boardComparison&&<BoardComparison comparison={project.boardComparison}/>}
     <MediaGallery items={project.gallery}/>
     {showToc&&<nav className="project-jump" aria-label="On this page"><p>On this page</p><div>{project.sections.map(section=><a href={`#${section.id}`} key={section.id}>{section.title}</a>)}{project.links.length>0&&<a href="#resources">Resources</a>}</div></nav>}
     <div className="project-story">

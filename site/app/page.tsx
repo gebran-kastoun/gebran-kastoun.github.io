@@ -11,13 +11,13 @@ export default function Home() {
         <p className="muted">Cornell Engineering · SpaceX avionics experience · CUAir electrical leadership</p>
         <nav className="home-links" id="work" aria-label="Portfolio sections">
           {categories.map(category=><a href={`/work/${category.slug}/`} key={category.slug}>{category.title}</a>)}
-          <a href="/about/">About</a><a href="/resume/">Resume</a>
+          <a href="/suas-2026/">SUAS 2026</a><a href="/about/">About</a><a href="/resume/">Resume</a>
         </nav>
       </div>
       <PCBExplorer/>
     </section>
     <section className="wrap section home-experience">
-      <div className="section-heading"><h2>Experience</h2><a className="text-link" href="/experience/">Full experience</a></div>
+      <div className="section-heading"><h2>Experience &amp; Coursework</h2><a className="text-link" href="/experience/">View all</a></div>
       <ExperienceList compact/>
     </section>
   </main>;
