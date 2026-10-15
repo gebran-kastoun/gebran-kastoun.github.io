@@ -1,21 +1,13 @@
-import ProjectCard from '../../components/ProjectCard';
-import {categories,getProject} from '../../content/projects';
+import WorkSheet from '../../components/WorkSheet';
+import PCBExplorer from '../../components/PCBExplorer';
 import {pageMetadata} from '../../lib/metadata';
 
 export const metadata=pageMetadata('Projects','Selected electronics, embedded systems, and digital design projects by Gebran Kastoun.','/projects/','/images/drawing-car.jpg');
 
 export default function Projects() {
-  return <main id="main" className="wrap projects-page">
-    <div className="page-intro"><h1>Projects</h1><p className="lead">Boards, embedded systems, and processor designs.</p></div>
-    <section className="projects-feature" aria-label="Featured project">
-      <p className="projects-kicker">Featured project</p>
-      <ProjectCard project={getProject('autonomous-drawing-car')} feature priority/>
-    </section>
-    <section className="projects-categories" aria-labelledby="projects-categories-heading">
-      <h2 id="projects-categories-heading">Explore by discipline</h2>
-      <div className="projects-category-grid">{categories.map(category=><a className="projects-category" href={`/work/${category.slug}/`} key={category.slug}>
-        <h3>{category.title}</h3><p>{category.description}</p><span>View projects <span aria-hidden="true">→</span></span>
-      </a>)}</div>
-    </section>
+  return <main id="main" className="projects-page">
+    <div className="wrap page-intro"><h1>Projects</h1><p className="lead">My projects span custom boards, embedded control systems, and processor design. Each project page describes my contribution and the design decisions behind the work.</p></div>
+    <WorkSheet/>
+    <section className="wrap discipline-explorer"><div><h2>Browse by discipline</h2><p>Select a component to see the projects in that area.</p></div><PCBExplorer/></section>
   </main>;
 }

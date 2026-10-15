@@ -23,13 +23,13 @@ export default async function ProjectPage({params}:{params:Promise<{slug:string}
   return <main id="main" className="wrap project-page">
     <nav className="breadcrumbs project-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href={`/work/${category.slug}/`}>{category.title}</a><span>/</span><span>{project.shortTitle}</span></nav>
     <header className="project-intro">
-      <p className="project-context">{project.context}{project.dates?` · ${project.dates}`:''}</p>
       <h1>{project.title}</h1>
       <p className="lead">{project.summary}</p>
+      <p className="project-context">{project.context}{project.dates?`, ${project.dates}`:''}</p>
       <div className="project-intro-bottom"><p><span>Status</span> {project.status}</p><Tags tags={project.technologies.slice(0,4)}/></div>
     </header>
     {project.featuredVideo&&<FeaturedVideo video={project.featuredVideo}/>}
-    {(project.cover||project.media)&&<figure className="project-hero"><ProjectVisual project={project} priority/><figcaption>{project.cover?.caption??project.caption}{project.cover?.credit&&<> <a href={project.cover.credit.url}>{project.cover.credit.label} ↗</a></>}</figcaption></figure>}
+    {(project.cover||project.media)&&!project.boardComparison&&<figure className="project-hero"><ProjectVisual project={project} priority/><figcaption>{project.cover?.caption??project.caption}{project.cover?.credit&&<> <a href={project.cover.credit.url}>{project.cover.credit.label} ↗</a></>}</figcaption></figure>}
     <dl className="project-facts"><div><dt>My contribution</dt><dd>{project.role}</dd></div><div><dt>Platform</dt><dd>{project.platform}</dd></div></dl>
     {project.boardComparison&&<BoardComparison comparison={project.boardComparison}/>}
     <MediaGallery items={project.gallery}/>

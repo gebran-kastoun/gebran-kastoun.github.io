@@ -6,7 +6,7 @@ export const resumes: {title:string;description:string;file:string}[] = [
     file:'/resumes/Gebran_Kastoun_Hardware.pdf',
   },
   {
-    title:'Embedded Software',
+    title:'Embedded software',
     description:'Embedded software and systems work.',
     file:'/resumes/Gebran_Kastoun_Embedded_Software.pdf',
   },

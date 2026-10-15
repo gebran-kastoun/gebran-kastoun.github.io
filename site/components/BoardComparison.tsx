@@ -11,7 +11,7 @@ function BoardView({image}:{image:ImageMedia}) {
 
 export default function BoardComparison({comparison}:{comparison:BoardComparisonContent}) {
   return <section className="board-comparison" aria-labelledby="board-comparison-title">
-    <div className="board-comparison-heading"><p className="board-comparison-kicker">PCB development</p><h2 id="board-comparison-title">{comparison.title}</h2></div>
+    <div className="board-comparison-heading"><h2 id="board-comparison-title">{comparison.title}</h2></div>
     <div className="board-revisions">
       {comparison.revisions.map(revision=><article className="board-revision" key={revision.title}>
         <h3>{revision.title}</h3>

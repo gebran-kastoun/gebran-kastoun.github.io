@@ -60,7 +60,7 @@ urls={e.text for e in ET.parse(root/'sitemap.xml').findall('.//{*}loc')}
 generated_routes={'https://gebran-kastoun.github.io'+('/' if p.relative_to(root).as_posix()=='index.html' else '/'+p.relative_to(root).as_posix().removesuffix('index.html')) for p in pages if p.name!='404.html'}
 assert urls==generated_routes,'Sitemap route mismatch'
 assert (root/'404.html').exists() and (root/'.nojekyll').exists()
-allowed={'.html','.css','.jpg','.svg','.txt','.xml','.png','.webp','.avif','.jpeg','.mp4','.webm','.vtt','.pdf'}
+allowed={'.html','.css','.jpg','.svg','.txt','.xml','.png','.webp','.avif','.jpeg','.mp4','.webm','.vtt','.pdf','.ttf'}
 for file in root.rglob('*'):
  if file.is_symlink(): errors.append(f'Public symlink: {file.relative_to(root)}')
  if {'.local','sources','private','notes','node_modules','.git'}.intersection(file.relative_to(root).parts): errors.append(f'Private/generated path in output: {file.relative_to(root)}')

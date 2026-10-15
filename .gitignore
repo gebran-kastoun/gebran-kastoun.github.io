@@ -18,3 +18,4 @@ attachments/
 *.pfx
 *.log
 *.tsbuildinfo
+.taste-skill/
