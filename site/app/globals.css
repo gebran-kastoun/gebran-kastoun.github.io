@@ -114,6 +114,9 @@ figcaption { font-size: var(--small); line-height: 1.5; margin-top: .65rem; }
 .testing-layout video { width: 100%; height: auto; }
 .discipline-explorer { display: grid; grid-template-columns: .65fr 1.35fr; gap: 8%; align-items: center; padding-block: 54px; }
 .discipline-explorer p { max-width: 30ch; }
+.projects-page .page-intro { padding-bottom: 20px; }
+.projects-page .discipline-explorer { padding-top: 12px; }
+.pcb-control { min-height: 44px; }
 
 /* Project listings and technical descriptions share one typography system. */
 .card-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 48px 32px; }

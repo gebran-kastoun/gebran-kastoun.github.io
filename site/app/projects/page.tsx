@@ -7,7 +7,7 @@ export const metadata=pageMetadata('Projects','Selected electronics, embedded sy
 export default function Projects() {
   return <main id="main" className="projects-page">
     <div className="wrap page-intro"><h1>Projects</h1><p className="lead">My projects span custom boards, embedded control systems, and processor design. Each project page describes my contribution and the design decisions behind the work.</p></div>
-    <WorkSheet/>
     <section className="wrap discipline-explorer"><div><h2>Browse by discipline</h2><p>Select a component to see the projects in that area.</p></div><PCBExplorer/></section>
+    <WorkSheet/>
   </main>;
 }

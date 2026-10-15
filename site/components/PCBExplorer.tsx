@@ -42,7 +42,7 @@ function Passive({x,y,vertical=false}: {x:number; y:number; vertical?:boolean}) 
 }
 
 export default function PCBExplorer() {
-  return <div className="pcb-explorer" id="projects">
+  return <div className="pcb-explorer" id="pcb-navigation">
     <div className="pcb-board">
       <svg className="pcb-artwork" viewBox="0 0 720 480" aria-hidden="true" focusable="false">
         <defs>
